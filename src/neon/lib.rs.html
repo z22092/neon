@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../neon/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -373,15 +373,170 @@
 <span id="373">373</span>
 <span id="374">374</span>
 <span id="375">375</span>
-</pre><pre class="rust ">
+<span id="376">376</span>
+<span id="377">377</span>
+<span id="378">378</span>
+<span id="379">379</span>
+<span id="380">380</span>
+<span id="381">381</span>
+<span id="382">382</span>
+<span id="383">383</span>
+<span id="384">384</span>
+<span id="385">385</span>
+<span id="386">386</span>
+<span id="387">387</span>
+<span id="388">388</span>
+<span id="389">389</span>
+<span id="390">390</span>
+<span id="391">391</span>
+<span id="392">392</span>
+<span id="393">393</span>
+<span id="394">394</span>
+<span id="395">395</span>
+<span id="396">396</span>
+<span id="397">397</span>
+<span id="398">398</span>
+<span id="399">399</span>
+<span id="400">400</span>
+<span id="401">401</span>
+<span id="402">402</span>
+<span id="403">403</span>
+<span id="404">404</span>
+<span id="405">405</span>
+<span id="406">406</span>
+<span id="407">407</span>
+<span id="408">408</span>
+<span id="409">409</span>
+<span id="410">410</span>
+<span id="411">411</span>
+<span id="412">412</span>
+<span id="413">413</span>
+<span id="414">414</span>
+<span id="415">415</span>
+<span id="416">416</span>
+<span id="417">417</span>
+<span id="418">418</span>
+<span id="419">419</span>
+<span id="420">420</span>
+<span id="421">421</span>
+<span id="422">422</span>
+<span id="423">423</span>
+<span id="424">424</span>
+<span id="425">425</span>
+<span id="426">426</span>
+<span id="427">427</span>
+<span id="428">428</span>
+<span id="429">429</span>
+<span id="430">430</span>
+<span id="431">431</span>
+<span id="432">432</span>
+<span id="433">433</span>
+<span id="434">434</span>
+<span id="435">435</span>
+<span id="436">436</span>
+<span id="437">437</span>
+<span id="438">438</span>
+<span id="439">439</span>
+<span id="440">440</span>
+<span id="441">441</span>
+<span id="442">442</span>
+<span id="443">443</span>
+<span id="444">444</span>
+<span id="445">445</span>
+<span id="446">446</span>
+<span id="447">447</span>
+<span id="448">448</span>
+<span id="449">449</span>
+<span id="450">450</span>
+<span id="451">451</span>
+<span id="452">452</span>
+<span id="453">453</span>
+<span id="454">454</span>
+<span id="455">455</span>
+<span id="456">456</span>
+<span id="457">457</span>
+<span id="458">458</span>
+<span id="459">459</span>
+<span id="460">460</span>
+<span id="461">461</span>
+<span id="462">462</span>
+<span id="463">463</span>
+<span id="464">464</span>
+<span id="465">465</span>
+<span id="466">466</span>
+<span id="467">467</span>
+<span id="468">468</span>
+<span id="469">469</span>
+<span id="470">470</span>
+<span id="471">471</span>
+<span id="472">472</span>
+<span id="473">473</span>
+<span id="474">474</span>
+<span id="475">475</span>
+<span id="476">476</span>
+<span id="477">477</span>
+<span id="478">478</span>
+<span id="479">479</span>
+<span id="480">480</span>
+<span id="481">481</span>
+<span id="482">482</span>
+<span id="483">483</span>
+<span id="484">484</span>
+<span id="485">485</span>
+<span id="486">486</span>
+<span id="487">487</span>
+<span id="488">488</span>
+<span id="489">489</span>
+<span id="490">490</span>
+<span id="491">491</span>
+<span id="492">492</span>
+<span id="493">493</span>
+<span id="494">494</span>
+<span id="495">495</span>
+<span id="496">496</span>
+<span id="497">497</span>
+<span id="498">498</span>
+<span id="499">499</span>
+<span id="500">500</span>
+<span id="501">501</span>
+<span id="502">502</span>
+<span id="503">503</span>
+<span id="504">504</span>
+<span id="505">505</span>
+<span id="506">506</span>
+<span id="507">507</span>
+<span id="508">508</span>
+<span id="509">509</span>
+<span id="510">510</span>
+<span id="511">511</span>
+<span id="512">512</span>
+<span id="513">513</span>
+<span id="514">514</span>
+<span id="515">515</span>
+<span id="516">516</span>
+<span id="517">517</span>
+<span id="518">518</span>
+<span id="519">519</span>
+<span id="520">520</span>
+<span id="521">521</span>
+<span id="522">522</span>
+<span id="523">523</span>
+<span id="524">524</span>
+<span id="525">525</span>
+<span id="526">526</span>
+<span id="527">527</span>
+<span id="528">528</span>
+<span id="529">529</span>
+<span id="530">530</span>
+<span id="531">531</span>
+<span id="532">532</span>
+<span id="533">533</span>
+</pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! The [Neon](https://www.neon-bindings.com/) crate provides bindings for writing Node.js plugins with a safe and fast Rust API.</span>
 
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">neon_runtime</span>;
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">cslice</span>;
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">semver</span>;
-
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">rustc_version</span>;
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="attribute">#[<span class="ident">macro_use</span>]</span>
@@ -394,12 +549,18 @@
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">borrow</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">result</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">task</span>;
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;event-handler-api&quot;</span>)]</span>
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">event</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">meta</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">prelude</span>;
 
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">macro_internal</span>;
 
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;legacy-runtime&quot;</span>, <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;napi-runtime&quot;</span>))]</span>
+<span class="macro">compile_error</span><span class="macro">!</span>(<span class="string">&quot;Cannot enable both `legacy-runtime` and `napi-runtime` features.\n\nTo use `napi-runtime`, disable `legacy-runtime` by setting `default-features` to `false` in Cargo.toml\nor with cargo&#39;s --no-default-features flag.&quot;</span>);
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;napi-runtime&quot;</span>, <span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;legacy-runtime&quot;</span>)))]</span>
 <span class="doccomment">/// Register the current crate as a Node module, providing startup</span>
 <span class="doccomment">/// logic for initializing the module object at runtime.</span>
 <span class="doccomment">///</span>
@@ -419,14 +580,63 @@
 <span class="doccomment">/// ```</span>
 <span class="attribute">#[<span class="ident">macro_export</span>]</span>
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">register_module</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">module</span>:<span class="ident">pat</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">init</span>:<span class="ident">block</span>) <span class="op">=&gt;</span> {
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">module</span>:<span class="ident">pat</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">init</span>:<span class="ident">block</span>) <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="macro">register_module</span><span class="macro">!</span>(<span class="op">|</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">module</span><span class="op">|</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">init</span>);
+    };
+
+    (<span class="op">|</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">module</span>:<span class="ident">pat</span><span class="op">|</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">init</span>:<span class="ident">block</span>) <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="attribute">#[<span class="ident">no_mangle</span>]</span>
+        <span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">napi_register_module_v1</span>(
+            <span class="ident">env</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">macro_internal</span>::<span class="ident">runtime</span>::<span class="ident">nodejs_sys</span>::<span class="ident">napi_env</span>,
+            <span class="ident">m</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">macro_internal</span>::<span class="ident">runtime</span>::<span class="ident">nodejs_sys</span>::<span class="ident">napi_value</span>
+        ) <span class="op">-</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">macro_internal</span>::<span class="ident">runtime</span>::<span class="ident">nodejs_sys</span>::<span class="ident">napi_value</span>
+        {
+            <span class="comment">// Suppress the default Rust panic hook, which prints diagnostics to stderr.</span>
+            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;default-panic-hook&quot;</span>))]</span>
+            ::<span class="ident">std</span>::<span class="ident">panic</span>::<span class="ident">set_hook</span>(::<span class="ident">std</span>::<span class="ident">boxed</span>::<span class="ident">Box</span>::<span class="ident">new</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> { }));
+
+            <span class="kw">fn</span> <span class="ident">__init_neon_module</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">module</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">context</span>::<span class="ident">ModuleContext</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">result</span>::<span class="ident">NeonResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">init</span>
+
+            <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">macro_internal</span>::<span class="ident">initialize_module</span>(
+                <span class="ident">env</span>,
+                <span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="ident">m</span>),
+                <span class="ident">__init_neon_module</span>,
+            );
+
+            <span class="ident">m</span>
+        }
+    }
+}
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;legacy-runtime&quot;</span>)]</span>
+<span class="doccomment">/// Register the current crate as a Node module, providing startup</span>
+<span class="doccomment">/// logic for initializing the module object at runtime.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// The first argument is a pattern bound to a `neon::context::ModuleContext`. This</span>
+<span class="doccomment">/// is usually bound to a mutable variable `mut cx`, which can then be used to</span>
+<span class="doccomment">/// pass to Neon APIs that require mutable access to an execution context.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Example:</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// ```rust,ignore</span>
+<span class="doccomment">/// register_module!(mut cx, {</span>
+<span class="doccomment">///     cx.export_function(&quot;foo&quot;, foo)?;</span>
+<span class="doccomment">///     cx.export_function(&quot;bar&quot;, bar)?;</span>
+<span class="doccomment">///     cx.export_function(&quot;baz&quot;, baz)?;</span>
+<span class="doccomment">///     Ok(())</span>
+<span class="doccomment">/// });</span>
+<span class="doccomment">/// ```</span>
+<span class="attribute">#[<span class="ident">macro_export</span>]</span>
+<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">register_module</span> {
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">module</span>:<span class="ident">pat</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">init</span>:<span class="ident">block</span>) <span class="op">=</span><span class="op">&gt;</span> {
         <span class="comment">// Mark this function as a global constructor (like C++).</span>
         <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">improper_ctypes</span>)]</span>
         <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;linux&quot;</span>, <span class="ident">link_section</span> <span class="op">=</span> <span class="string">&quot;.ctors&quot;</span>)]</span>
         <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;macos&quot;</span>, <span class="ident">link_section</span> <span class="op">=</span> <span class="string">&quot;__DATA,__mod_init_func&quot;</span>)]</span>
         <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;windows&quot;</span>, <span class="ident">link_section</span> <span class="op">=</span> <span class="string">&quot;.CRT$XCU&quot;</span>)]</span>
+        <span class="attribute">#[<span class="ident">used</span>]</span>
         <span class="kw">pub</span> <span class="kw">static</span> <span class="ident">__LOAD_NEON_MODULE</span>: <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>() <span class="op">=</span> {
-            <span class="kw">fn</span> <span class="ident">__init_neon_module</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">module</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">context</span>::<span class="ident">ModuleContext</span>) <span class="op">-&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">result</span>::<span class="ident">NeonResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">init</span>
+            <span class="kw">fn</span> <span class="ident">__init_neon_module</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">module</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">context</span>::<span class="ident">ModuleContext</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">result</span>::<span class="ident">NeonResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">init</span>
 
             <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">__load_neon_module</span>() {
                 <span class="comment">// Put everything else in the ctor fn so the user fn can&#39;t see it.</span>
@@ -445,6 +655,8 @@
                     <span class="ident">link</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">__NodeModule</span>
                 }
 
+                <span class="comment">// Mark as used during tests to suppress warnings</span>
+                <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">test</span>, <span class="ident">used</span>)]</span>
                 <span class="kw">static</span> <span class="kw-2">mut</span> <span class="ident">__NODE_MODULE</span>: <span class="ident">__NodeModule</span> <span class="op">=</span> <span class="ident">__NodeModule</span> {
                     <span class="ident">version</span>: <span class="number">0</span>,
                     <span class="ident">flags</span>: <span class="number">0</span>,
@@ -467,8 +679,11 @@
                 }
 
                 <span class="comment">// Suppress the default Rust panic hook, which prints diagnostics to stderr.</span>
+                <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;default-panic-hook&quot;</span>))]</span>
                 ::<span class="ident">std</span>::<span class="ident">panic</span>::<span class="ident">set_hook</span>(::<span class="ident">std</span>::<span class="ident">boxed</span>::<span class="ident">Box</span>::<span class="ident">new</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> { }));
 
+                <span class="comment">// During tests, node is not available. Skip module registration.</span>
+                <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">test</span>))]</span>
                 <span class="kw">unsafe</span> {
                     <span class="comment">// Set the ABI version based on the NODE_MODULE_VERSION constant provided by the current node headers.</span>
                     <span class="ident">__NODE_MODULE</span>.<span class="ident">version</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">macro_internal</span>::<span class="ident">runtime</span>::<span class="ident">module</span>::<span class="ident">get_version</span>();
@@ -482,14 +697,14 @@
 }
 
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-<span class="attribute">#[<span class="ident">macro_export</span>]</span>
+<span class="attribute">#[<span class="ident">macro_export</span>(<span class="ident">local_inner_macros</span>)]</span>
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">class_definition</span> {
-    ( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cls</span>:<span class="ident">ident</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cname</span>:<span class="ident">ident</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">typ</span>:<span class="ident">ty</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">allocator</span>:<span class="ident">tt</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">call_ctor</span>:<span class="ident">tt</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">new_ctor</span>:<span class="ident">tt</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">mnames</span>:<span class="ident">tt</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">mdefs</span>:<span class="ident">tt</span> ; <span class="ident">init</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cx</span>:<span class="ident">pat</span>) <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>:<span class="ident">block</span> $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>:<span class="ident">tt</span>)<span class="op">*</span> ) <span class="op">=&gt;</span> {
+    ( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cls</span>:<span class="ident">ident</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cname</span>:<span class="ident">ident</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">typ</span>:<span class="ident">ty</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">allocator</span>:<span class="ident">tt</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">call_ctor</span>:<span class="ident">tt</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">new_ctor</span>:<span class="ident">tt</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">mnames</span>:<span class="ident">tt</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">mdefs</span>:<span class="ident">tt</span> ; <span class="ident">init</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cx</span>:<span class="ident">pat</span>) <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>:<span class="ident">block</span> $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>:<span class="ident">tt</span>)<span class="op">*</span> ) <span class="op">=</span><span class="op">&gt;</span> {
         <span class="macro">class_definition</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cls</span> ;
                           <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cname</span> ;
                           <span class="macro-nonterminal">$</span><span class="macro-nonterminal">typ</span> ;
                           {
-                              <span class="kw">fn</span> <span class="ident">_______allocator_rust_y_u_no_hygienic_items_______</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cx</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">context</span>::<span class="ident">CallContext</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">types</span>::<span class="ident">JsUndefined</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">result</span>::<span class="ident">NeonResult</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">typ</span><span class="op">&gt;</span> {
+                              <span class="kw">fn</span> <span class="ident">_______allocator_rust_y_u_no_hygienic_items_______</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cx</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">context</span>::<span class="ident">CallContext</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">types</span>::<span class="ident">JsUndefined</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">result</span>::<span class="ident">NeonResult</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">typ</span><span class="op">&gt;</span> {
                                   <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>
                               }
 
@@ -502,7 +717,7 @@
                           $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>)<span class="kw-2">*</span>);
     };
 
-    ( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cls</span>:<span class="ident">ident</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cname</span>:<span class="ident">ident</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">typ</span>:<span class="ident">ty</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">allocator</span>:<span class="ident">tt</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">call_ctor</span>:<span class="ident">tt</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">new_ctor</span>:<span class="ident">tt</span> ; ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mname</span>:<span class="ident">tt</span>)<span class="kw-2">*</span>) ; ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mdef</span>:<span class="ident">tt</span>)<span class="kw-2">*</span>) ; <span class="ident">method</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">ident</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cx</span>:<span class="ident">pat</span>) <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>:<span class="ident">block</span> $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>:<span class="ident">tt</span>)<span class="op">*</span> ) <span class="op">=&gt;</span> {
+    ( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cls</span>:<span class="ident">ident</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cname</span>:<span class="ident">ident</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">typ</span>:<span class="ident">ty</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">allocator</span>:<span class="ident">tt</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">call_ctor</span>:<span class="ident">tt</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">new_ctor</span>:<span class="ident">tt</span> ; ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mname</span>:<span class="ident">tt</span>)<span class="kw-2">*</span>) ; ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mdef</span>:<span class="ident">tt</span>)<span class="kw-2">*</span>) ; <span class="ident">method</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">ident</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cx</span>:<span class="ident">pat</span>) <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>:<span class="ident">block</span> $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>:<span class="ident">tt</span>)<span class="op">*</span> ) <span class="op">=</span><span class="op">&gt;</span> {
         <span class="macro">class_definition</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cls</span> ;
                           <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cname</span> ;
                           <span class="macro-nonterminal">$</span><span class="macro-nonterminal">typ</span> ;
@@ -511,7 +726,7 @@
                           <span class="macro-nonterminal">$</span><span class="macro-nonterminal">new_ctor</span> ;
                           ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mname</span>)<span class="op">*</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>) ;
                           ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mdef</span>)<span class="op">*</span> {
-                              <span class="kw">fn</span> <span class="ident">_______method_rust_y_u_no_hygienic_items_______</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cx</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">context</span>::<span class="ident">CallContext</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">cls</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">result</span>::<span class="ident">JsResult</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">types</span>::<span class="ident">JsValue</span><span class="op">&gt;</span> {
+                              <span class="kw">fn</span> <span class="ident">_______method_rust_y_u_no_hygienic_items_______</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cx</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">context</span>::<span class="ident">CallContext</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">cls</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">result</span>::<span class="ident">JsResult</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">types</span>::<span class="ident">JsValue</span><span class="op">&gt;</span> {
                                   <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>
                               }
 
@@ -520,14 +735,14 @@
                           $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>)<span class="kw-2">*</span>);
     };
 
-    ( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cls</span>:<span class="ident">ident</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cname</span>:<span class="ident">ident</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">typ</span>:<span class="ident">ty</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">allocator</span>:<span class="ident">tt</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">call_ctor</span>:<span class="ident">tt</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">new_ctor</span>:<span class="ident">tt</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">mnames</span>:<span class="ident">tt</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">mdefs</span>:<span class="ident">tt</span> ; <span class="ident">constructor</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cx</span>:<span class="ident">pat</span>) <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>:<span class="ident">block</span> $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>:<span class="ident">tt</span>)<span class="op">*</span> ) <span class="op">=&gt;</span> {
+    ( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cls</span>:<span class="ident">ident</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cname</span>:<span class="ident">ident</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">typ</span>:<span class="ident">ty</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">allocator</span>:<span class="ident">tt</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">call_ctor</span>:<span class="ident">tt</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">new_ctor</span>:<span class="ident">tt</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">mnames</span>:<span class="ident">tt</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">mdefs</span>:<span class="ident">tt</span> ; <span class="ident">constructor</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cx</span>:<span class="ident">pat</span>) <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>:<span class="ident">block</span> $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>:<span class="ident">tt</span>)<span class="op">*</span> ) <span class="op">=</span><span class="op">&gt;</span> {
         <span class="macro">class_definition</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cls</span> ;
                           <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cname</span> ;
                           <span class="macro-nonterminal">$</span><span class="macro-nonterminal">typ</span> ;
                           <span class="macro-nonterminal">$</span><span class="macro-nonterminal">allocator</span> ;
                           <span class="macro-nonterminal">$</span><span class="macro-nonterminal">call_ctor</span> ;
                           ({
-                              <span class="kw">fn</span> <span class="ident">_______constructor_rust_y_u_no_hygienic_items_______</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cx</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">context</span>::<span class="ident">CallContext</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">cls</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">result</span>::<span class="ident">NeonResult</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">handle</span>::<span class="ident">Handle</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">types</span>::<span class="ident">JsObject</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span> {
+                              <span class="kw">fn</span> <span class="ident">_______constructor_rust_y_u_no_hygienic_items_______</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cx</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">context</span>::<span class="ident">CallContext</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">cls</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">result</span>::<span class="ident">NeonResult</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">handle</span>::<span class="ident">Handle</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">types</span>::<span class="ident">JsObject</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span> {
                                   <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>
                               }
 
@@ -538,13 +753,13 @@
                           $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>)<span class="kw-2">*</span>);
     };
 
-    ( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cls</span>:<span class="ident">ident</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cname</span>:<span class="ident">ident</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">typ</span>:<span class="ident">ty</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">allocator</span>:<span class="ident">tt</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">call_ctor</span>:<span class="ident">tt</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">new_ctor</span>:<span class="ident">tt</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">mnames</span>:<span class="ident">tt</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">mdefs</span>:<span class="ident">tt</span> ; <span class="ident">call</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cx</span>:<span class="ident">pat</span>) <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>:<span class="ident">block</span> $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>:<span class="ident">tt</span>)<span class="op">*</span> ) <span class="op">=&gt;</span> {
+    ( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cls</span>:<span class="ident">ident</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cname</span>:<span class="ident">ident</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">typ</span>:<span class="ident">ty</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">allocator</span>:<span class="ident">tt</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">call_ctor</span>:<span class="ident">tt</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">new_ctor</span>:<span class="ident">tt</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">mnames</span>:<span class="ident">tt</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">mdefs</span>:<span class="ident">tt</span> ; <span class="ident">call</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cx</span>:<span class="ident">pat</span>) <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>:<span class="ident">block</span> $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>:<span class="ident">tt</span>)<span class="op">*</span> ) <span class="op">=</span><span class="op">&gt;</span> {
         <span class="macro">class_definition</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cls</span> ;
                           <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cname</span> ;
                           <span class="macro-nonterminal">$</span><span class="macro-nonterminal">typ</span> ;
                           <span class="macro-nonterminal">$</span><span class="macro-nonterminal">allocator</span> ;
                           ({
-                              <span class="kw">fn</span> <span class="ident">_______call_rust_y_u_no_hygienic_items_______</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cx</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">context</span>::<span class="ident">CallContext</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">types</span>::<span class="ident">JsValue</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">result</span>::<span class="ident">JsResult</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">types</span>::<span class="ident">JsValue</span><span class="op">&gt;</span> {
+                              <span class="kw">fn</span> <span class="ident">_______call_rust_y_u_no_hygienic_items_______</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cx</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">context</span>::<span class="ident">CallContext</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">types</span>::<span class="ident">JsValue</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">result</span>::<span class="ident">JsResult</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">types</span>::<span class="ident">JsValue</span><span class="op">&gt;</span> {
                                   <span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>
                               }
 
@@ -556,31 +771,31 @@
                           $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>)<span class="kw-2">*</span>);
     };
 
-    ( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cls</span>:<span class="ident">ident</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cname</span>:<span class="ident">ident</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">typ</span>:<span class="ident">ty</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">allocator</span>:<span class="ident">block</span> ; ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">call_ctor</span>:<span class="ident">block</span>)<span class="kw-2">*</span>) ; ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">new_ctor</span>:<span class="ident">block</span>)<span class="kw-2">*</span>) ; ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mname</span>:<span class="ident">ident</span>)<span class="kw-2">*</span>) ; ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mdef</span>:<span class="ident">block</span>)<span class="kw-2">*</span>) ; $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>:<span class="ident">tt</span>)<span class="op">*</span> ) <span class="op">=&gt;</span> {
+    ( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cls</span>:<span class="ident">ident</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cname</span>:<span class="ident">ident</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">typ</span>:<span class="ident">ty</span> ; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">allocator</span>:<span class="ident">block</span> ; ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">call_ctor</span>:<span class="ident">block</span>)<span class="kw-2">*</span>) ; ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">new_ctor</span>:<span class="ident">block</span>)<span class="kw-2">*</span>) ; ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mname</span>:<span class="ident">ident</span>)<span class="kw-2">*</span>) ; ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mdef</span>:<span class="ident">block</span>)<span class="kw-2">*</span>) ; $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>:<span class="ident">tt</span>)<span class="op">*</span> ) <span class="op">=</span><span class="op">&gt;</span> {
         <span class="kw">impl</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">object</span>::<span class="ident">Class</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cls</span> {
             <span class="kw">type</span> <span class="ident">Internals</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">typ</span>;
 
-            <span class="kw">fn</span> <span class="ident">setup</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">C</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">context</span>::<span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;&gt;</span>(<span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">C</span>) <span class="op">-&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">result</span>::<span class="ident">NeonResult</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">object</span>::<span class="ident">ClassDescriptor</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="self">Self</span><span class="op">&gt;&gt;</span> {
-                ::<span class="ident">std</span>::<span class="ident">result</span>::<span class="prelude-ty">Result</span>::<span class="prelude-val">Ok</span>(<span class="self">Self</span>::<span class="ident">describe</span>(<span class="macro">stringify</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cname</span>), <span class="macro-nonterminal">$</span><span class="macro-nonterminal">allocator</span>)
+            <span class="kw">fn</span> <span class="ident">setup</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">C</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">context</span>::<span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">C</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">result</span>::<span class="ident">NeonResult</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">object</span>::<span class="ident">ClassDescriptor</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+                ::<span class="ident">std</span>::<span class="ident">result</span>::<span class="prelude-ty">Result</span>::<span class="prelude-val">Ok</span>(<span class="self">Self</span>::<span class="ident">describe</span>(<span class="macro">neon_stringify</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cname</span>), <span class="macro-nonterminal">$</span><span class="macro-nonterminal">allocator</span>)
                                              $(.<span class="ident">construct</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">new_ctor</span>))<span class="op">*</span>
                                              $(.<span class="ident">call</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">call_ctor</span>))<span class="op">*</span>
-                                             $(.<span class="ident">method</span>(<span class="macro">stringify</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mname</span>), <span class="macro-nonterminal">$</span><span class="macro-nonterminal">mdef</span>))<span class="kw-2">*</span>)
+                                             $(.<span class="ident">method</span>(<span class="macro">neon_stringify</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mname</span>), <span class="macro-nonterminal">$</span><span class="macro-nonterminal">mdef</span>))<span class="kw-2">*</span>)
             }
         }
     };
 }
 
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-<span class="attribute">#[<span class="ident">macro_export</span>]</span>
+<span class="attribute">#[<span class="ident">macro_export</span>(<span class="ident">local_inner_macros</span>)]</span>
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">impl_managed</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cls</span>:<span class="ident">ident</span>) <span class="op">=&gt;</span> {
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">cls</span>:<span class="ident">ident</span>) <span class="op">=</span><span class="op">&gt;</span> {
         <span class="kw">impl</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">handle</span>::<span class="ident">Managed</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cls</span> {
-            <span class="kw">fn</span> <span class="ident">to_raw</span>(<span class="self">self</span>) <span class="op">-&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">macro_internal</span>::<span class="ident">runtime</span>::<span class="ident">raw</span>::<span class="ident">Local</span> {
+            <span class="kw">fn</span> <span class="ident">to_raw</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">macro_internal</span>::<span class="ident">runtime</span>::<span class="ident">raw</span>::<span class="ident">Local</span> {
                 <span class="kw">let</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cls</span>(<span class="ident">raw</span>) <span class="op">=</span> <span class="self">self</span>;
                 <span class="ident">raw</span>
             }
 
-            <span class="kw">fn</span> <span class="ident">from_raw</span>(<span class="ident">raw</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">macro_internal</span>::<span class="ident">runtime</span>::<span class="ident">raw</span>::<span class="ident">Local</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
+            <span class="kw">fn</span> <span class="ident">from_raw</span>(<span class="ident">raw</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">macro_internal</span>::<span class="ident">runtime</span>::<span class="ident">raw</span>::<span class="ident">Local</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
                 <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cls</span>(<span class="ident">raw</span>)
             }
         }
@@ -591,7 +806,10 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// Example:</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// ```rust,ignore</span>
+<span class="doccomment">/// ```rust</span>
+<span class="doccomment">/// # #[macro_use] extern crate neon;</span>
+<span class="doccomment">/// # use neon::prelude::*;</span>
+<span class="doccomment">/// # fn main() {}</span>
 <span class="doccomment">/// pub struct Greeter {</span>
 <span class="doccomment">///     greeting: String</span>
 <span class="doccomment">/// }</span>
@@ -601,37 +819,37 @@
 <span class="doccomment">///     /// A class for generating greeting strings.</span>
 <span class="doccomment">///     pub class JsGreeter for Greeter {</span>
 <span class="doccomment">///         init(mut cx) {</span>
-<span class="doccomment">///             let greeting = cx.argument(0)?.to_string(&amp;mut cx)?.value();</span>
+<span class="doccomment">///             let greeting = cx.argument::&lt;JsString&gt;(0)?.to_string(&amp;mut cx)?.value();</span>
 <span class="doccomment">///             Ok(Greeter {</span>
 <span class="doccomment">///                 greeting: greeting</span>
 <span class="doccomment">///             })</span>
 <span class="doccomment">///         }</span>
 <span class="doccomment">///</span>
 <span class="doccomment">///         method hello(mut cx) {</span>
-<span class="doccomment">///             let name = cx.argument(0)?.to_string(&amp;mut cx)?.value();</span>
+<span class="doccomment">///             let name = cx.argument::&lt;JsString&gt;(0)?.to_string(&amp;mut cx)?.value();</span>
 <span class="doccomment">///             let this = cx.this();</span>
 <span class="doccomment">///             let msg = {</span>
 <span class="doccomment">///                 let guard = cx.lock();</span>
 <span class="doccomment">///                 let greeter = this.borrow(&amp;guard);</span>
 <span class="doccomment">///                 format!(&quot;{}, {}!&quot;, greeter.greeting, name)</span>
 <span class="doccomment">///             };</span>
-<span class="doccomment">///             Ok(cx.string(&amp;msg[..])?.upcast())</span>
+<span class="doccomment">///             Ok(cx.string(&amp;msg[..]).upcast())</span>
 <span class="doccomment">///         }</span>
 <span class="doccomment">///     }</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// }</span>
 <span class="doccomment">/// ```</span>
-<span class="attribute">#[<span class="ident">macro_export</span>]</span>
+<span class="attribute">#[<span class="ident">macro_export</span>(<span class="ident">local_inner_macros</span>)]</span>
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">declare_types</span> {
-    { $(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attr</span>:<span class="ident">meta</span>]</span>)<span class="op">*</span> <span class="kw">pub</span> <span class="ident">class</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cls</span>:<span class="ident">ident</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">typ</span>:<span class="ident">ident</span> { $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>:<span class="ident">tt</span>)<span class="op">*</span> } $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>:<span class="ident">tt</span>)<span class="op">*</span> } <span class="op">=&gt;</span> {
+    { $(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attr</span>:<span class="ident">meta</span>]</span>)<span class="op">*</span> <span class="kw">pub</span> <span class="ident">class</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cls</span>:<span class="ident">ident</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">typ</span>:<span class="ident">ident</span> { $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>:<span class="ident">tt</span>)<span class="op">*</span> } $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>:<span class="ident">tt</span>)<span class="op">*</span> } <span class="op">=</span><span class="op">&gt;</span> {
         <span class="macro">declare_types</span><span class="macro">!</span> { $(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attr</span>]</span>)<span class="op">*</span> <span class="kw">pub</span> <span class="ident">class</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cls</span> <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">typ</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">typ</span> { $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>)<span class="op">*</span> } $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>)<span class="op">*</span> }
     };
 
-    { $(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attr</span>:<span class="ident">meta</span>]</span>)<span class="op">*</span> <span class="ident">class</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cls</span>:<span class="ident">ident</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">typ</span>:<span class="ident">ident</span> { $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>:<span class="ident">tt</span>)<span class="op">*</span> } $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>:<span class="ident">tt</span>)<span class="op">*</span> } <span class="op">=&gt;</span> {
+    { $(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attr</span>:<span class="ident">meta</span>]</span>)<span class="op">*</span> <span class="ident">class</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cls</span>:<span class="ident">ident</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">typ</span>:<span class="ident">ident</span> { $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>:<span class="ident">tt</span>)<span class="op">*</span> } $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>:<span class="ident">tt</span>)<span class="op">*</span> } <span class="op">=</span><span class="op">&gt;</span> {
         <span class="macro">declare_types</span><span class="macro">!</span> { $(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attr</span>]</span>)<span class="op">*</span> <span class="ident">class</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cls</span> <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">typ</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">typ</span> { $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>)<span class="op">*</span> } $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>)<span class="op">*</span> }
     };
 
-    { $(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attr</span>:<span class="ident">meta</span>]</span>)<span class="op">*</span> <span class="kw">pub</span> <span class="ident">class</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cls</span>:<span class="ident">ident</span> <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cname</span>:<span class="ident">ident</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">typ</span>:<span class="ident">ty</span> { $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>:<span class="ident">tt</span>)<span class="op">*</span> } $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>:<span class="ident">tt</span>)<span class="op">*</span> } <span class="op">=&gt;</span> {
+    { $(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attr</span>:<span class="ident">meta</span>]</span>)<span class="op">*</span> <span class="kw">pub</span> <span class="ident">class</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cls</span>:<span class="ident">ident</span> <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cname</span>:<span class="ident">ident</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">typ</span>:<span class="ident">ty</span> { $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>:<span class="ident">tt</span>)<span class="op">*</span> } $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>:<span class="ident">tt</span>)<span class="op">*</span> } <span class="op">=</span><span class="op">&gt;</span> {
         <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Copy</span>, <span class="ident">Clone</span>)]</span>
         <span class="attribute">#[<span class="ident">repr</span>(<span class="ident">C</span>)]</span>
         $(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attr</span>]</span>)<span class="op">*</span>
@@ -644,7 +862,7 @@
         <span class="macro">declare_types</span><span class="macro">!</span> { $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>)<span class="op">*</span> }
     };
 
-    { $(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attr</span>:<span class="ident">meta</span>]</span>)<span class="op">*</span> <span class="ident">class</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cls</span>:<span class="ident">ident</span> <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cname</span>:<span class="ident">ident</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">typ</span>:<span class="ident">ty</span> { $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>:<span class="ident">tt</span>)<span class="op">*</span> } $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>:<span class="ident">tt</span>)<span class="op">*</span> } <span class="op">=&gt;</span> {
+    { $(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attr</span>:<span class="ident">meta</span>]</span>)<span class="op">*</span> <span class="ident">class</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cls</span>:<span class="ident">ident</span> <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">cname</span>:<span class="ident">ident</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">typ</span>:<span class="ident">ty</span> { $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">body</span>:<span class="ident">tt</span>)<span class="op">*</span> } $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>:<span class="ident">tt</span>)<span class="op">*</span> } <span class="op">=</span><span class="op">&gt;</span> {
         <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Copy</span>, <span class="ident">Clone</span>)]</span>
         <span class="attribute">#[<span class="ident">repr</span>(<span class="ident">C</span>)]</span>
         $(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">attr</span>]</span>)<span class="op">*</span>
@@ -657,26 +875,31 @@
         <span class="macro">declare_types</span><span class="macro">!</span> { $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>)<span class="op">*</span> }
     };
 
-    { } <span class="op">=&gt;</span> { };
+    { } <span class="op">=</span><span class="op">&gt;</span> { };
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">windows</span>, <span class="ident">not</span>(<span class="ident">neon_profile</span> <span class="op">=</span> <span class="string">&quot;release&quot;</span>)))]</span>
-<span class="macro">compile_error</span><span class="macro">!</span>(<span class="string">&quot;Neon only builds with --release. For tests, try `cargo test --release`.&quot;</span>);
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="attribute">#[<span class="ident">macro_export</span>]</span>
+<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">neon_stringify</span> {
+    ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">inner</span>:<span class="ident">tt</span>)<span class="kw-2">*</span>) <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="macro">stringify</span><span class="macro">!</span> { $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">inner</span>)<span class="op">*</span> }
+    }
+}
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
+    <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">rustversion</span>;
     <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">path</span>::{<span class="ident">Path</span>, <span class="ident">PathBuf</span>};
     <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">process</span>::<span class="ident">Command</span>;
     <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">sync</span>::<span class="ident">Mutex</span>;
-
-    <span class="kw">use</span> <span class="ident">rustc_version</span>::{<span class="ident">version_meta</span>, <span class="ident">Channel</span>};
+    <span class="kw">use</span> <span class="ident">semver</span>::<span class="ident">Version</span>;
 
     <span class="comment">// Create a mutex to enforce sequential running of the tests.</span>
     <span class="macro">lazy_static</span><span class="macro">!</span> {
         <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">TEST_MUTEX</span>: <span class="ident">Mutex</span><span class="op">&lt;</span>()<span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Mutex</span>::<span class="ident">new</span>(());
     }
 
-    <span class="kw">fn</span> <span class="ident">project_root</span>() <span class="op">-&gt;</span> <span class="ident">PathBuf</span> {
+    <span class="kw">fn</span> <span class="ident">project_root</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">PathBuf</span> {
         <span class="ident">Path</span>::<span class="ident">new</span>(<span class="macro">env</span><span class="macro">!</span>(<span class="string">&quot;CARGO_MANIFEST_DIR&quot;</span>)).<span class="ident">to_path_buf</span>()
     }
 
@@ -693,11 +916,13 @@
             (<span class="string">&quot;sh&quot;</span>, <span class="string">&quot;-c&quot;</span>)
         };
 
+        <span class="macro">eprintln</span><span class="macro">!</span>(<span class="string">&quot;Running Neon test: {} {} {}&quot;</span>, <span class="ident">shell</span>, <span class="ident">command_flag</span>, <span class="ident">cmd</span>);
+    
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">Command</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">shell</span>)
                         .<span class="ident">current_dir</span>(<span class="ident">dir</span>)
                         .<span class="ident">args</span>(<span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="ident">command_flag</span>, <span class="ident">cmd</span>])
                         .<span class="ident">status</span>()
-                        .<span class="ident">expect</span>(<span class="string">&quot;failed to execute test command&quot;</span>)
+                        .<span class="ident">expect</span>(<span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;failed to execute test command: {} {} {}&quot;</span>, <span class="ident">shell</span>, <span class="ident">command_flag</span>, <span class="ident">cmd</span>))
                         .<span class="ident">success</span>());
     }
 
@@ -722,19 +947,36 @@
         <span class="ident">run</span>(<span class="string">&quot;npm test&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">test_cli</span>);
     }
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">windows</span>))]</span>
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">static_test</span>() {
+    <span class="kw">fn</span> <span class="ident">static_test_impl</span>() {
         <span class="kw">let</span> <span class="ident">_guard</span> <span class="op">=</span> <span class="ident">TEST_MUTEX</span>.<span class="ident">lock</span>();
 
         <span class="ident">log</span>(<span class="string">&quot;static_test&quot;</span>);
 
-        <span class="kw">if</span> <span class="ident">version_meta</span>().<span class="ident">unwrap</span>().<span class="ident">channel</span> <span class="op">!=</span> <span class="ident">Channel</span>::<span class="ident">Nightly</span> {
-            <span class="kw">return</span>;
-        }
-
         <span class="ident">run</span>(<span class="string">&quot;cargo test --release&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">project_root</span>().<span class="ident">join</span>(<span class="string">&quot;test&quot;</span>).<span class="ident">join</span>(<span class="string">&quot;static&quot;</span>));
     }
+
+    <span class="comment">// Only run the static tests in Beta. This will catch changes to error reporting</span>
+    <span class="comment">// and any associated usability regressions before a new Rust version is shipped</span>
+    <span class="comment">// but will have more stable results than Nightly.</span>
+    <span class="attribute">#[<span class="ident">rustversion</span>::<span class="ident">beta</span>]</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;enable-static-tests&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">static_test</span>() { <span class="ident">static_test_impl</span>() }
+
+    <span class="attribute">#[<span class="ident">rustversion</span>::<span class="ident">beta</span>]</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;enable-static-tests&quot;</span>))]</span>
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="attribute">#[<span class="ident">ignore</span>]</span>
+    <span class="kw">fn</span> <span class="ident">static_test</span>() { <span class="ident">static_test_impl</span>() }
+
+    <span class="attribute">#[<span class="ident">rustversion</span>::<span class="ident">not</span>(<span class="ident">beta</span>)]</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;enable-static-tests&quot;</span>)]</span>
+    <span class="macro">compile_error</span><span class="macro">!</span>(<span class="string">&quot;The `enable-static-tests` feature can only be enabled with the Rust beta toolchain.&quot;</span>);
+
+    <span class="attribute">#[<span class="ident">rustversion</span>::<span class="ident">not</span>(<span class="ident">beta</span>)]</span>
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="attribute">#[<span class="ident">ignore</span>]</span>
+    <span class="kw">fn</span> <span class="ident">static_test</span>() { <span class="ident">static_test_impl</span>() }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">dynamic_test</span>() {
@@ -748,6 +990,80 @@
         <span class="ident">run</span>(<span class="string">&quot;npm install&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">test_dynamic</span>);
         <span class="ident">run</span>(<span class="string">&quot;npm test&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">test_dynamic</span>);
     }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">dynamic_cargo_test</span>() {
+        <span class="kw">let</span> <span class="ident">_guard</span> <span class="op">=</span> <span class="ident">TEST_MUTEX</span>.<span class="ident">lock</span>();
+
+        <span class="ident">log</span>(<span class="string">&quot;dynamic_cargo_test&quot;</span>);
+
+        <span class="kw">let</span> <span class="ident">test_dynamic_cargo</span> <span class="op">=</span> <span class="ident">project_root</span>().<span class="ident">join</span>(<span class="string">&quot;test&quot;</span>).<span class="ident">join</span>(<span class="string">&quot;dynamic&quot;</span>).<span class="ident">join</span>(<span class="string">&quot;native&quot;</span>);
+        <span class="ident">run</span>(<span class="string">&quot;cargo test --release&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">test_dynamic_cargo</span>);
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">electron_test</span>() {
+        <span class="kw">let</span> <span class="ident">_guard</span> <span class="op">=</span> <span class="ident">TEST_MUTEX</span>.<span class="ident">lock</span>();
+
+        <span class="ident">log</span>(<span class="string">&quot;electron_test&quot;</span>);
+
+        <span class="ident">cli_setup</span>();
+
+        <span class="kw">let</span> <span class="ident">test_electron</span> <span class="op">=</span> <span class="ident">project_root</span>().<span class="ident">join</span>(<span class="string">&quot;test&quot;</span>).<span class="ident">join</span>(<span class="string">&quot;electron&quot;</span>);
+        <span class="ident">run</span>(<span class="string">&quot;npm install&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">test_electron</span>);
+        <span class="ident">run</span>(<span class="string">&quot;npm test&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">test_electron</span>);
+    }
+
+    <span class="comment">// Once we publish versions of neon-sys that match the versions of the other</span>
+    <span class="comment">// neon crates, `cargo package` can succeed again.</span>
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="attribute">#[<span class="ident">ignore</span>]</span>
+    <span class="kw">fn</span> <span class="ident">package_test</span>() {
+        <span class="kw">let</span> <span class="ident">_guard</span> <span class="op">=</span> <span class="ident">TEST_MUTEX</span>.<span class="ident">lock</span>();
+
+        <span class="ident">log</span>(<span class="string">&quot;package_test&quot;</span>);
+
+        <span class="kw">let</span> <span class="ident">test_package</span> <span class="op">=</span> <span class="ident">project_root</span>().<span class="ident">join</span>(<span class="string">&quot;crates&quot;</span>).<span class="ident">join</span>(<span class="string">&quot;neon-runtime&quot;</span>);
+
+        <span class="comment">// Allow uncommitted changes outside of CI</span>
+        <span class="kw">if</span> <span class="ident">std</span>::<span class="ident">env</span>::<span class="ident">var</span>(<span class="string">&quot;CI&quot;</span>) <span class="op">=</span><span class="op">=</span> <span class="prelude-val">Ok</span>(<span class="string">&quot;true&quot;</span>.<span class="ident">to_string</span>()) {
+            <span class="ident">run</span>(<span class="string">&quot;cargo package&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">test_package</span>);
+        } <span class="kw">else</span> {
+            <span class="ident">run</span>(<span class="string">&quot;cargo package --allow-dirty&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">test_package</span>);            
+        }
+    }
+
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">windows</span>))]</span>
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">napi_test</span>() {
+        <span class="kw">let</span> <span class="ident">_guard</span> <span class="op">=</span> <span class="ident">TEST_MUTEX</span>.<span class="ident">lock</span>();
+
+        <span class="ident">log</span>(<span class="string">&quot;napi_test&quot;</span>);
+
+        <span class="ident">cli_setup</span>();
+
+        <span class="kw">let</span> <span class="ident">node_version_output</span> <span class="op">=</span> <span class="ident">Command</span>::<span class="ident">new</span>(<span class="string">&quot;node&quot;</span>)
+            .<span class="ident">arg</span>(<span class="string">&quot;--version&quot;</span>)
+            .<span class="ident">output</span>()
+            .<span class="ident">expect</span>(<span class="string">&quot;failed to get Node version&quot;</span>)
+            .<span class="ident">stdout</span>;
+
+        <span class="comment">// Chop off the &#39;v&#39; prefix.</span>
+        <span class="kw">let</span> <span class="ident">node_version_bytes</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">node_version_output</span>[<span class="number">1</span>..];
+        <span class="kw">let</span> <span class="ident">node_version_str</span> <span class="op">=</span> <span class="ident">std</span>::<span class="ident">str</span>::<span class="ident">from_utf8</span>(<span class="ident">node_version_bytes</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">node_version</span> <span class="op">=</span> <span class="ident">Version</span>::<span class="ident">parse</span>(<span class="ident">node_version_str</span>).<span class="ident">unwrap</span>();
+
+        <span class="kw">let</span> <span class="ident">v10</span> <span class="op">=</span> <span class="ident">Version</span>::<span class="ident">parse</span>(<span class="string">&quot;10.0.0&quot;</span>).<span class="ident">unwrap</span>();
+
+        <span class="kw">if</span> <span class="ident">node_version</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">v10</span> {
+            <span class="macro">eprintln</span><span class="macro">!</span>(<span class="string">&quot;N-API tests only run on Node 10 or later.&quot;</span>);
+            <span class="kw">return</span>;
+        }
+
+        <span class="kw">let</span> <span class="ident">test_napi</span> <span class="op">=</span> <span class="ident">project_root</span>().<span class="ident">join</span>(<span class="string">&quot;test&quot;</span>).<span class="ident">join</span>(<span class="string">&quot;napi&quot;</span>);
+        <span class="ident">run</span>(<span class="string">&quot;npm install&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">test_napi</span>);
+        <span class="ident">run</span>(<span class="string">&quot;npm test&quot;</span>, <span class="kw-2">&amp;</span><span class="ident">test_napi</span>);
+    }
 }
-</pre>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g. <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g. <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g. <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../";window.currentCrate = "neon";</script><script src="../../aliases.js"></script><script src="../../main.js"></script><script defer src="../../search-index.js"></script></body></html>
+</pre></div>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "neon";</script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>
