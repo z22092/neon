@@ -9,6 +9,7 @@ use neon_runtime;
 use neon_runtime::raw;
 use std::sync::Arc;
 use context::Context;
+use context::internal::ContextInternal;
 
 type EventContext<'a> = crate::context::TaskContext<'a>;
 
@@ -66,7 +67,7 @@ unsafe extern "C" fn handle_callback<F>(this: raw::Local, func: raw::Local, call
     where F: FnOnce(&mut EventContext, Handle<JsValue>, Handle<JsFunction>), F: Send + 'static {
     EventContext::with(|mut cx: EventContext| {
         let this = JsValue::new_internal(this);
-        let func: Handle<JsFunction> = Handle::new_internal(JsFunction::from_raw(func));
+        let func: Handle<JsFunction> = Handle::new_internal(JsFunction::from_raw(cx.env(), func));
         let callback: Box<F> = Box::from_raw(mem::transmute(callback));
         callback(&mut cx, this, func);
     })

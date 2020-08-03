@@ -10,7 +10,6 @@ use neon_runtime;
 use neon_runtime::raw;
 use types::Value;
 use context::Context;
-#[cfg(feature = "legacy-runtime")]
 use context::internal::Env;
 use result::{JsResult, JsResultExt};
 use self::internal::SuperType;
@@ -19,7 +18,7 @@ use self::internal::SuperType;
 pub trait Managed: Copy {
     fn to_raw(self) -> raw::Local;
 
-    fn from_raw(h: raw::Local) -> Self;
+    fn from_raw(env: Env, h: raw::Local) -> Self;
 }
 
 /// A safely rooted _handle_ to a JS value in memory that is managed by the garbage collector.

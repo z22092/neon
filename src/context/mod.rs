@@ -15,6 +15,8 @@ use borrow::internal::Ledger;
 use context::internal::Env;
 use handle::{Managed, Handle};
 use types::{JsValue, Value, JsObject, JsArray, JsFunction, JsBoolean, JsNumber, JsString, StringResult, JsNull, JsUndefined};
+#[cfg(feature = "napi-runtime")]
+use types::boxed::JsBox;
 use types::binary::{JsArrayBuffer, JsBuffer};
 use types::error::JsError;
 use object::{Object, This};
@@ -79,7 +81,7 @@ impl CallbackInfo<'_> {
         unsafe {
             let mut local: raw::Local = std::mem::zeroed();
             neon_runtime::call::get(cx.env().to_raw(), self.info, i, &mut local);
-            Some(Handle::new_internal(JsValue::from_raw(local)))
+            Some(Handle::new_internal(JsValue::from_raw(cx.env(), local)))
         }
     }
 
@@ -231,7 +233,7 @@ pub trait Context<'a>: ContextInternal<'a> {
                 let escapee = f(cx)?;
                 let mut result_local: raw::Local = std::mem::zeroed();
                 neon_runtime::scope::escape(&mut result_local, escapable_handle_scope, escapee.to_raw());
-                Ok(Handle::new_internal(V::from_raw(result_local)))
+                Ok(Handle::new_internal(V::from_raw(self.env(), result_local)))
             }
         });
         self.activate();
@@ -362,6 +364,11 @@ pub trait Context<'a>: ContextInternal<'a> {
     fn throw_range_error<S: AsRef<str>, T>(&mut self, msg: S) -> NeonResult<T> {
         let err = JsError::range_error(self, msg)?;
         self.throw(err)
+    }
+
+    #[cfg(feature = "napi-runtime")]
+    fn boxed<U: Send + 'static>(&mut self, v: U) -> JsResult<'a, JsBox<U>> {
+        JsBox::new(self, v)
     }
 }
 
@@ -531,7 +538,7 @@ impl<'a, T: This> CallContext<'a, T> {
                 local
             };
 
-            local.map(|local| Handle::new_internal(JsValue::from_raw(local)))
+            local.map(|local| Handle::new_internal(JsValue::from_raw(self.env(), local)))
         }
     }
 

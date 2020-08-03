@@ -261,7 +261,10 @@ macro_rules! impl_managed {
                 raw
             }
 
-            fn from_raw(raw: $crate::macro_internal::runtime::raw::Local) -> Self {
+            fn from_raw(
+                _env: neon::macro_internal::Env,
+                raw: $crate::macro_internal::runtime::raw::Local,
+            ) -> Self {
                 $cls(raw)
             }
         }
