@@ -135,4 +135,23 @@ describe('JsObject', function() {
     addon.write_buffer_with_borrow_mut(b, 3, 66012);
     assert.equal(b.readUInt32LE(12), 66012);
   });
+
+  it('correctly handles two unaliased buffers', function() {
+    var a = Buffer.from("Hello, World!");
+    var b = Buffer.from("Hello, Other!");
+    var [aPrime, bPrime] = addon.maybe_aliased_buffers(a, b);
+
+    assert.strictEqual(a.toString(), "Hello, Alias!");
+    assert.strictEqual(b.toString(), "Hello, Other!");
+    assert.strictEqual(aPrime, "Hello, Alias!");
+    assert.strictEqual(bPrime, "Hello, Other!");
+  });
+
+  it('throws if two aliased buffers', function() {
+    var a = Buffer.from("Hello, World!");
+
+    assert.throws(function() {
+      addon.maybe_aliased_buffers(a, a);
+    }, /mutating/);
+  });
 });

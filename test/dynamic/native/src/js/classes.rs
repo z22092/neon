@@ -90,5 +90,58 @@ declare_types! {
     method panic(_) {
       panic!("User.prototype.panic")
     }
+
+    method alias_self(mut cx) {
+      let mut this_mut = cx.this();
+      let this_ref = cx.this();
+      let first_name = cx.argument::<JsString>(0)?.value();
+      let (a, b) = {
+        let guard = cx.lock();
+        let mut self_mut = this_mut.borrow_mut(&guard);
+
+        // Should panic
+        let self_ref = this_ref.borrow(&guard);
+
+        self_mut.first_name = first_name;
+
+        (self_mut.first_name.to_string(), self_ref.first_name.to_string())
+      };
+
+      let res = cx.empty_array();
+      let a = cx.string(a);
+      let b = cx.string(b);
+
+      res.set(&mut cx, 0, a)?;
+      res.set(&mut cx, 1, b)?;
+
+      Ok(res.upcast())
+    }
+
+    method alias_guard(mut cx) {
+      let mut this_mut = cx.this();
+      let this_ref = cx.this();
+      let first_name = cx.argument::<JsString>(0)?.value();
+      let (a, b) = {
+        let guard_a = cx.lock();
+        let guard_b = cx.lock();
+        let mut self_mut = this_mut.borrow_mut(&guard_a);
+
+        // Should panic
+        let self_ref = this_ref.borrow(&guard_b);
+
+        self_mut.first_name = first_name;
+
+        (self_mut.first_name.to_string(), self_ref.first_name.to_string())
+      };
+
+      let res = cx.empty_array();
+      let a = cx.string(a);
+      let b = cx.string(b);
+
+      res.set(&mut cx, 0, a)?;
+      res.set(&mut cx, 1, b)?;
+
+      Ok(res.upcast())
+    }
   }
 }

@@ -120,3 +120,28 @@ pub fn write_buffer_with_borrow_mut(mut cx: FunctionContext) -> JsResult<JsUndef
     cx.borrow_mut(&mut b, |data| { data.as_mut_slice::<u32>()[i] = x; });
     Ok(cx.undefined())
 }
+
+/// Accepts two buffers that may be aliased to test runtime checks
+pub fn maybe_aliased_buffers(mut cx: FunctionContext) -> JsResult<JsArray> {
+    let mut a = cx.argument::<JsBuffer>(0)?;
+    let b = cx.argument::<JsBuffer>(1)?;
+
+    let (a, b) = {
+        let guard = cx.lock();
+        let a = a.borrow_mut(&guard).as_mut_slice::<u8>();
+        let b = b.borrow(&guard).as_slice::<u8>();
+
+        a.copy_from_slice(b"Hello, Alias!");
+
+        (String::from_utf8_lossy(a), String::from_utf8_lossy(b))
+    };
+
+    let res = cx.empty_array();
+    let a = cx.string(a);
+    let b = cx.string(b);
+
+    res.set(&mut cx, 0, a)?;
+    res.set(&mut cx, 1, b)?;
+
+    Ok(res)
+}

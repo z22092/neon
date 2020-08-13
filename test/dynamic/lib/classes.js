@@ -39,4 +39,20 @@ describe('JsClass', function() {
   it('converts a Rust panic to a throw in a constructor allocator', function() {
     assert.throws(function() { new PanickyAllocator() }, Error, /^internal error in Neon module: allocator panicking$/);
   });
+
+  it('throws if `this` is aliased', function() {
+    var u = new User(1, "some", "thing", "else");
+
+    assert.throws(function() {
+      u.alias_self("name");
+    }, /outstanding mutable loan/);
+  });
+
+  it('throws if `this` is aliased with multiple guards', function() {
+    var u = new User(1, "some", "thing", "else");
+
+    assert.throws(function() {
+      u.alias_guard("name");
+    }, /outstanding mutable loan/);
+  });
 });

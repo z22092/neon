@@ -52,6 +52,7 @@ register_module!(mut cx, {
     cx.export_function("read_buffer_with_borrow", read_buffer_with_borrow)?;
     cx.export_function("write_buffer_with_lock", write_buffer_with_lock)?;
     cx.export_function("write_buffer_with_borrow_mut", write_buffer_with_borrow_mut)?;
+    cx.export_function("maybe_aliased_buffers", maybe_aliased_buffers)?;
 
     cx.export_function("return_js_function", return_js_function)?;
     cx.export_function("call_js_function", call_js_function)?;
