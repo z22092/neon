@@ -7,17 +7,118 @@ use neon_runtime::external;
 use crate::context::Context;
 use crate::context::internal::Env;
 use crate::handle::{Managed, Handle};
-use crate::result::JsResult;
 use crate::types::internal::ValueInternal;
 use crate::types::Value;
 
 type BoxAny = Box<dyn Any + Send + 'static>;
 
-#[repr(C)]
+/// A smart pointer for Rust data managed by the JavaScript engine.
+///
+/// The type `JsBox<T>` provides shared ownership of a value of type `T`,
+/// allocated in the heap. The data is owned by the JavaScript engine and the
+/// lifetime is managed by the JavaScript garbage collector.
+///
+/// Shared references in Rust disallow mutation by default, and `JsBox` is no
+/// exception: you cannot generally obtain a mutable reference to something
+/// inside a `JsBox`. If you need to mutate through a `JsBox`, use
+/// [`Cell`](https://doc.rust-lang.org/std/cell/struct.Cell.html),
+/// [`RefCell`](https://doc.rust-lang.org/stable/std/cell/struct.RefCell.html),
+/// or one of the other types that provide interior mutability.
+///
+/// ## `Deref` behavior
+///
+/// `JsBox<T>` automatically dereferences to `T` (via the `Deref` trait), so
+/// you can call `T`'s method on a value of type `JsBox<T>`.
+///
+/// ```rust
+/// # use neon::prelude::*;
+/// # fn my_neon_function(mut cx: FunctionContext) -> JsResult<JsUndefined> {
+/// let vec: Handle<JsBox<Vec<_>>> = cx.boxed(vec![1, 2, 3]);
+///
+/// println!("Length: {}", vec.len());
+/// # Ok(cx.undefined())
+/// # }
+/// ```
+///
+/// ## Examples
+///
+/// Passing some immutable data between Rust and JavaScript.
+///
+/// ```rust
+/// # use neon::prelude::*;
+/// # use std::path::{Path, PathBuf};
+/// fn create_path(mut cx: FunctionContext) -> JsResult<JsBox<PathBuf>> {
+///     let path = cx.argument::<JsString>(0)?.value(&mut cx);
+///     let path = Path::new(&path).to_path_buf();
+///
+///     Ok(cx.boxed(path))
+/// }
+///
+/// fn print_path(mut cx: FunctionContext) -> JsResult<JsUndefined> {
+///     let path = cx.argument::<JsBox<PathBuf>>(0)?;
+///
+///     println!("{}", path.display());
+///
+///     Ok(cx.undefined())
+/// }
+/// ```
+///
+/// Passing a user defined struct wrapped in a `RefCell` for mutability. This
+/// pattern is useful for creating classes in JavaScript.
+///
+/// ```rust
+/// # use neon::prelude::*;
+/// # use std::cell::RefCell;
+///
+/// type BoxedPerson = JsBox<RefCell<Person>>;
+///
+/// struct Person {
+///      name: String,
+/// }
+/// 
+/// impl Person {
+///     pub fn new(name: String) -> Self {
+///         Person { name }
+///     }
+/// 
+///     pub fn set_name(&mut self, name: String) {
+///         self.name = name;
+///     }
+/// 
+///     pub fn greet(&self) -> String {
+///         format!("Hello, {}!", self.name)
+///     }
+/// }
+/// 
+/// fn person_new(mut cx: FunctionContext) -> JsResult<BoxedPerson> {
+///     let name = cx.argument::<JsString>(0)?.value(&mut cx);
+///     let person = RefCell::new(Person::new(name));
+/// 
+///     Ok(cx.boxed(person))
+/// }
+/// 
+/// fn person_set_name(mut cx: FunctionContext) -> JsResult<JsUndefined> {
+///     let person = cx.argument::<BoxedPerson>(0)?;
+///     let mut person = person.borrow_mut();
+///     let name = cx.argument::<JsString>(1)?.value(&mut cx);
+/// 
+///     person.set_name(name);
+/// 
+///     Ok(cx.undefined())
+/// }
+/// 
+/// fn person_greet(mut cx: FunctionContext) -> JsResult<JsString> {
+///     let person = cx.argument::<BoxedPerson>(0)?;
+///     let person = person.borrow();
+///     let greeting = person.greet();
+/// 
+///     Ok(cx.string(greeting))
+/// }
 pub struct JsBox<T: Send + 'static> {
     local: raw::Local,
-    // `JsBox` can not verify the lifetime. Store a raw pointer to force uses
-    // to be marked unsafe.
+    // `JsBox` cannot verify the lifetime. Store a raw pointer to force uses
+    // to be marked unsafe. In practice, it can be treated as `'static` but
+    // should only be exposed as part of a `Handle` tied to a `Context` lifetime.
     internal: *const T,
 }
 
@@ -87,21 +188,23 @@ impl<T: Send + 'static> ValueInternal for JsBox<T> {
 }
 
 impl<T: Send + 'static> JsBox<T> {
-    pub fn new<'a, C>(cx: &mut C, v: T) -> JsResult<'a, JsBox<T>>
+    /// Constructs a new `JsBox` containing `value`.
+    pub fn new<'a, C>(cx: &mut C, value: T) -> Handle<'a, JsBox<T>>
     where
         C: Context<'a>,
         T: Send + 'static,
     {
-        let v = Box::new(v) as BoxAny;
-        let internal = v.downcast_ref().unwrap() as *const _;
+        let v = Box::new(value) as BoxAny;
+        // Since this value was just constructed, we know it is `T`
+        let internal = &*v as *const dyn Any as *const T;
         let local = unsafe {
             external::create(cx.env().to_raw(), v)
         };
 
-        Ok(Handle::new_internal(Self {
+        Handle::new_internal(Self {
             local,
             internal,
-        }))
+        })
     }
 }
 

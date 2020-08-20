@@ -14,6 +14,9 @@ extern "C" fn finalize_external<T: Send + 'static>(
     }
 }
 
+/// Safety: `deref` must only be called with `napi_external` created by that
+/// module. Calling `deref` with an external created by another native module,
+/// even another neon module, is undefined behavior.
 pub unsafe fn deref<T: Send + 'static>(
     env: Env,
     local: Local,
@@ -29,6 +32,10 @@ pub unsafe fn deref<T: Send + 'static>(
 
     let result = result.assume_init();
 
+    // Note: This only validate it is an external, not that it was created by
+    // this module. In this future, this can be improved with type tagging:
+    // https://nodejs.org/api/n-api.html#n_api_napi_type_tag
+    // https://github.com/neon-bindings/neon/issues/591
     if result != napi::napi_valuetype::napi_external {
         return None;
     }
@@ -45,6 +52,7 @@ pub unsafe fn deref<T: Send + 'static>(
     Some(result.assume_init() as *const _)
 }
 
+/// Creates a `napi_external` from a Rust type
 pub unsafe fn create<T: Send + 'static>(env: Env, v: T) -> Local {
     let v = Box::new(v);
     let mut result = MaybeUninit::uninit();
@@ -53,10 +61,13 @@ pub unsafe fn create<T: Send + 'static>(env: Env, v: T) -> Local {
         env,
         Box::into_raw(v) as *mut _,
         Some(finalize_external::<T>),
+        // `finalize_hint` is not needed
         std::ptr::null_mut(),
         result.as_mut_ptr(),
     );
 
+    // `napi_create_external` will only fail if the VM is in a throwing state
+    // or shutting down.
     assert_eq!(status, napi::napi_status::napi_ok);
 
     result.assume_init()

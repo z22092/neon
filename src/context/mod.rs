@@ -367,7 +367,21 @@ pub trait Context<'a>: ContextInternal<'a> {
     }
 
     #[cfg(feature = "napi-runtime")]
-    fn boxed<U: Send + 'static>(&mut self, v: U) -> JsResult<'a, JsBox<U>> {
+    /// Convenience method for wrapping a value in a `JsBox`.
+    ///
+    /// # Example:
+    /// 
+    /// ```rust
+    /// # use neon::prelude::*;
+    /// struct Point(usize, usize);
+    ///
+    /// fn my_neon_function(mut cx: FunctionContext) -> JsResult<JsBox<Point>> {
+    ///     let point = cx.boxed(Point(0, 1));
+    ///
+    ///     Ok(point)
+    /// }
+    /// ```
+    fn boxed<U: Send + 'static>(&mut self, v: U) -> Handle<'a, JsBox<U>> {
         JsBox::new(self, v)
     }
 }

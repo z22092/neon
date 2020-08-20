@@ -24,7 +24,7 @@ pub fn person_new(mut cx: FunctionContext) -> JsResult<JsBox<Person>> {
     let name = cx.argument::<JsString>(0)?.value(&mut cx);
     let person = Person::new(name);
 
-    cx.boxed(person)
+    Ok(cx.boxed(person))
 }
 
 pub fn person_greet(mut cx: FunctionContext) -> JsResult<JsString> {
@@ -38,7 +38,7 @@ pub fn ref_person_new(mut cx: FunctionContext) -> JsResult<JsValue> {
     let name = cx.argument::<JsString>(0)?.value(&mut cx);
     let person = RefCell::new(Person::new(name));
 
-    cx.boxed(person).map(|v| v.upcast())
+    Ok(cx.boxed(person).upcast())
 }
 
 pub fn ref_person_greet(mut cx: FunctionContext) -> JsResult<JsString> {
@@ -66,5 +66,5 @@ pub fn ref_person_fail(mut cx: FunctionContext) -> JsResult<JsUndefined> {
 }
 
 pub fn external_unit(mut cx: FunctionContext) -> JsResult<JsBox<()>> {
-    cx.boxed(())
+    Ok(cx.boxed(()))
 }
