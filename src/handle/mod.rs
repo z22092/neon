@@ -130,10 +130,10 @@ impl<'a, T: Value> Handle<'a, T> {
     /// ```no_run
     /// # use neon::prelude::*;
     /// # fn my_neon_function(mut cx: FunctionContext) -> JsResult<JsUndefined> {
-    /// let v: Handle<JsValue> = cx.number(17).upcast(&mut cx);
-    /// v.is_a::<JsString>(&mut cx); // false
-    /// v.is_a::<JsNumber>(&mut cx); // true
-    /// v.is_a::<JsValue>(&mut cx);  // true
+    /// let v: Handle<JsValue> = cx.number(17).upcast();
+    /// v.is_a::<JsString, _>(&mut cx); // false
+    /// v.is_a::<JsNumber, _>(&mut cx); // true
+    /// v.is_a::<JsValue, _>(&mut cx);  // true
     /// # Ok(cx.undefined())
     /// # }
     /// ```
