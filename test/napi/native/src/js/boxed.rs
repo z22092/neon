@@ -1,7 +1,10 @@
-use std::sync::Arc;
 use std::cell::RefCell;
+use std::mem::ManuallyDrop;
+use std::sync::Arc;
 
 use neon::prelude::*;
+use neon::types::Finalize;
+use neon::context::FinalizeContext;
 use neon::sync::{EventQueue, Persistent};
 
 pub struct Person {
@@ -109,4 +112,56 @@ pub fn multi_threaded_callback(mut cx: FunctionContext) -> JsResult<JsUndefined>
     callback.drop(&mut cx);
 
     Ok(cx.undefined())
+}
+
+struct AsyncGreeter {
+    greeting: String,
+    callback: ManuallyDrop<Persistent<JsFunction>>,
+    queue: Arc<EventQueue>,
+}
+
+impl AsyncGreeter {
+    fn greet<'a, C: Context<'a>>(&self, mut cx: C) -> JsResult<'a, JsUndefined> {
+        let greeting = self.greeting.clone();
+        let callback = self.callback.clone(&mut cx);
+        let queue = self.queue.clone();
+
+        std::thread::spawn(move || queue.send(|mut cx| {
+            let callback = callback.deref(&mut cx);
+            let this = cx.undefined();
+            let args = vec![cx.string(greeting)];
+    
+            callback.call(&mut cx, this, args)
+        }));
+
+        Ok(cx.undefined())
+    }
+}
+
+impl Finalize for AsyncGreeter {
+    fn finalize(self, mut cx: FinalizeContext) {
+        eprintln!("Called!");
+        ManuallyDrop::into_inner(self.callback).drop(&mut cx);
+    }
+}
+
+pub fn greeter_new(mut cx: FunctionContext) -> JsResult<JsValue> {
+    let greeting = cx.argument::<JsString>(0)?.value(&mut cx);
+    let callback = cx.argument::<JsFunction>(1)?;
+
+    let queue = EventQueue::new(&mut cx);
+    let callback = Persistent::new(&mut cx, callback);
+    let greeter = JsBox::with_finalizer(&mut cx, AsyncGreeter {
+        greeting,
+        callback: ManuallyDrop::new(callback),
+        queue: Arc::new(queue),
+    });
+
+    Ok(greeter.upcast())
+}
+
+pub fn greeter_greet(mut cx: FunctionContext) -> JsResult<JsUndefined> {
+    let greeter = cx.argument::<JsBox<AsyncGreeter>>(0)?;
+
+    greeter.greet(cx)
 }

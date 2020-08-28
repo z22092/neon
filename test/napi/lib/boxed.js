@@ -89,4 +89,16 @@ describe('boxed', function() {
       }
     });
   });
+
+  it('should be able to use an async greeter', function (cb) {
+    const greeter = addon.greeter_new('Hello, World!', function (greeting) {
+      if (greeting === 'Hello, World!') {
+        cb();
+      } else {
+        new Error('Greeting did not match');
+      }
+    });
+
+    addon.greeter_greet(greeter);
+  });
 });

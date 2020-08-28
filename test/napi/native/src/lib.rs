@@ -194,6 +194,8 @@ register_module!(|mut cx| {
     cx.export_function("useless_persistent", useless_persistent)?;
     cx.export_function("thread_callback", thread_callback)?;
     cx.export_function("multi_threaded_callback", multi_threaded_callback)?;
+    cx.export_function("greeter_new", greeter_new)?;
+    cx.export_function("greeter_greet", greeter_greet)?;
 
     Ok(())
 });

@@ -26,7 +26,7 @@ use self::utf8::Utf8;
 
 pub use self::binary::{JsBuffer, JsArrayBuffer, BinaryData, BinaryViewType};
 #[cfg(feature = "napi-runtime")]
-pub use self::boxed::JsBox;
+pub use self::boxed::{Finalize, JsBox};
 pub use self::error::JsError;
 
 pub(crate) fn build<'a, T: Managed, F: FnOnce(&mut raw::Local) -> bool>(env: Env, init: F) -> JsResult<'a, T> {
