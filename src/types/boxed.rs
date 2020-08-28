@@ -4,11 +4,12 @@ use std::ops::Deref;
 use neon_runtime::raw;
 use neon_runtime::external;
 
-use crate::context::Context;
+use crate::context::{Context, FinalizeContext};
 use crate::context::internal::Env;
 use crate::handle::{Managed, Handle};
 use crate::types::internal::ValueInternal;
 use crate::types::Value;
+
 
 type BoxAny = Box<dyn Any + Send + 'static>;
 
@@ -192,13 +193,44 @@ impl<T: Send + 'static> JsBox<T> {
     pub fn new<'a, C>(cx: &mut C, value: T) -> Handle<'a, JsBox<T>>
     where
         C: Context<'a>,
-        T: Send + 'static,
+    {
+        fn noop_finalizer<U>(_env: raw::Env, _data: U) {}
+
+        Self::new_internal(cx, value, noop_finalizer)
+    }
+
+    /// Constructs a new `JsBox` containing `value` with `finalize` called before dropping
+    pub fn with_finalizer<'a, C>(cx: &mut C, value: T) -> Handle<'a, JsBox<T>>
+    where
+        C: Context<'a>,
+        T: Finalize,
+    {
+        fn finalizer<U: Finalize + 'static>(env: raw::Env, data: BoxAny) {
+            let data = *data.downcast::<U>().unwrap();
+            let env = unsafe { std::mem::transmute(env) };
+
+            FinalizeContext::with(
+                env,
+                move |cx| data.finalize(cx),
+            );
+        }
+
+        Self::new_internal(cx, value, finalizer::<T>)
+    }
+
+    pub fn new_internal<'a, C>(
+        cx: &mut C,
+        value: T,
+        finalizer: fn(raw::Env, BoxAny),
+    ) -> Handle<'a, JsBox<T>>
+    where
+        C: Context<'a>,
     {
         let v = Box::new(value) as BoxAny;
         // Since this value was just constructed, we know it is `T`
         let internal = &*v as *const dyn Any as *const T;
         let local = unsafe {
-            external::create(cx.env().to_raw(), v)
+            external::create(cx.env().to_raw(), v, finalizer)
         };
 
         Handle::new_internal(Self {
@@ -214,4 +246,25 @@ impl<'a, T: Send + 'static> Deref for JsBox<T> {
     fn deref(&self) -> &Self::Target {
         unsafe { &*self.internal }
     }
+}
+
+/// Finalize is executed on the main JavaScript thread and executed immediately
+/// before garbage collection. It is most for clean-up steps that require a
+/// context before dropping (e.g., `Persistent`).
+///
+/// ```rust,no_run
+/// // FIXME: Make this Run!
+/// struct Server {
+///     handler: Handler,
+///     callback: ManuallyDrop<Persistent<JsFunction>>,
+/// }
+///
+/// impl Finalize for Server {
+///     fn finalize(self, cx: FinalizeContext) {
+///         self.callback.drop(&mut cx);
+///     }
+/// }
+/// ```
+pub trait Finalize {
+    fn finalize(self, cx: FinalizeContext);
 }

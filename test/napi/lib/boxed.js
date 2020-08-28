@@ -69,4 +69,24 @@ describe('boxed', function() {
 
     assert.throws(() => addon.person_greet(unit), /failed downcast/);
   });
+
+  it('should be able to callback from another thread', function (cb) {
+    addon.thread_callback(cb);
+  });
+
+  it('should be able to callback from multiple threads', function (cb) {
+    const n = 4;
+    const set = new Set([...new Array(n)].map((_, i) => i));
+
+    addon.multi_threaded_callback(n, function (x) {
+      if (!set.delete(x)) {
+        console.log('huh?');
+        cb(new Error(`Unexpected callback value: ${x}`));
+      }
+
+      if (set.size === 0) {
+        cb();
+      }
+    });
+  });
 });

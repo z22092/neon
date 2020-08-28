@@ -5,12 +5,15 @@ use raw::{Env, Local};
 use nodejs_sys as napi;
 
 extern "C" fn finalize_external<T: Send + 'static>(
-    _env: napi::napi_env,
+    env: napi::napi_env,
     data: *mut std::ffi::c_void,
-    _hint: *mut std::ffi::c_void,
+    hint: *mut std::ffi::c_void,
 ) {
     unsafe {
-        Box::<T>::from_raw(data as *mut _);
+        let data = Box::<T>::from_raw(data as *mut _);
+        let finalizer: fn(Env, T) = std::mem::transmute(hint as *const ());
+
+        finalizer(env, *data);
     }
 }
 
@@ -53,7 +56,11 @@ pub unsafe fn deref<T: Send + 'static>(
 }
 
 /// Creates a `napi_external` from a Rust type
-pub unsafe fn create<T: Send + 'static>(env: Env, v: T) -> Local {
+pub unsafe fn create<T: Send + 'static>(
+    env: Env,
+    v: T,
+    finalizer: fn(Env, T),
+) -> Local {
     let v = Box::new(v);
     let mut result = MaybeUninit::uninit();
 
@@ -61,8 +68,9 @@ pub unsafe fn create<T: Send + 'static>(env: Env, v: T) -> Local {
         env,
         Box::into_raw(v) as *mut _,
         Some(finalize_external::<T>),
-        // `finalize_hint` is not needed
-        std::ptr::null_mut(),
+        // Casting to `*const ()` is required to ensure the correct layout
+        // https://rust-lang.github.io/unsafe-code-guidelines/layout/function-pointers.html
+        finalizer as *const () as *mut _,
         result.as_mut_ptr(),
     );
 

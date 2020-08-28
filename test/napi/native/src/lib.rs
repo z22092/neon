@@ -183,5 +183,17 @@ register_module!(|mut cx| {
     cx.export_function("ref_person_fail", ref_person_fail)?;
     cx.export_function("external_unit", external_unit)?;
 
+    fn useless_persistent(mut cx: FunctionContext) -> JsResult<JsObject> {
+        let object = cx.argument::<JsObject>(0)?;
+        let persistent = neon::sync::Persistent::new(&mut cx, object);
+        let object = persistent.deref(&mut cx);
+
+        Ok(object)
+    }
+
+    cx.export_function("useless_persistent", useless_persistent)?;
+    cx.export_function("thread_callback", thread_callback)?;
+    cx.export_function("multi_threaded_callback", multi_threaded_callback)?;
+
     Ok(())
 });

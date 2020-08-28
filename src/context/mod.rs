@@ -603,7 +603,35 @@ impl<'a> TaskContext<'a> {
             f(TaskContext { scope })
         })
     }
+
+    #[cfg(feature = "napi-runtime")]
+    pub(crate) fn with_context<T, F: for<'b> FnOnce(TaskContext<'b>) -> T>(env: Env, f: F) -> T {
+        Scope::with(env, |scope| {
+            f(TaskContext { scope })
+        })
+    }
 }
+
+/// A view of the JS engine in the context of a finalize method on garbage collection
+pub struct FinalizeContext<'a> {
+    scope: Scope<'a, raw::HandleScope>
+}
+
+impl<'a> FinalizeContext<'a> {
+    pub(crate) fn with<T, F: for<'b> FnOnce(FinalizeContext<'b>) -> T>(env: Env, f: F) -> T {
+        Scope::with(env, |scope| {
+            f(FinalizeContext { scope })
+        })
+    }
+}
+
+impl<'a> ContextInternal<'a> for FinalizeContext<'a> {
+    fn scope_metadata(&self) -> &ScopeMetadata {
+        &self.scope.metadata
+    }
+}
+
+impl<'a> Context<'a> for FinalizeContext<'a> { }
 
 impl<'a> ContextInternal<'a> for TaskContext<'a> {
     fn scope_metadata(&self) -> &ScopeMetadata {

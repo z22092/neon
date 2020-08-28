@@ -1,6 +1,8 @@
+use std::sync::Arc;
 use std::cell::RefCell;
 
 use neon::prelude::*;
+use neon::sync::{EventQueue, Persistent};
 
 pub struct Person {
     name: String,
@@ -67,4 +69,44 @@ pub fn ref_person_fail(mut cx: FunctionContext) -> JsResult<JsUndefined> {
 
 pub fn external_unit(mut cx: FunctionContext) -> JsResult<JsBox<()>> {
     Ok(cx.boxed(()))
+}
+
+pub fn thread_callback(mut cx: FunctionContext) -> JsResult<JsUndefined> {
+    let callback = cx.argument::<JsFunction>(0)?;
+    let callback = Persistent::new(&mut cx, callback);
+    let queue = EventQueue::new(&mut cx);
+
+    std::thread::spawn(move || queue.send(move |mut cx| {
+        let callback = callback.deref(&mut cx);
+        let this = cx.undefined();
+        let args = Vec::<Handle<JsValue>>::new();
+
+        callback.call(&mut cx, this, args)
+    }));
+
+    Ok(cx.undefined())
+}
+
+pub fn multi_threaded_callback(mut cx: FunctionContext) -> JsResult<JsUndefined> {
+    let n = cx.argument::<JsNumber>(0)?.value(&mut cx);
+    let callback = cx.argument::<JsFunction>(1)?;
+    let callback = Persistent::new(&mut cx, callback);
+    let queue = Arc::new(EventQueue::new(&mut cx));
+
+    for i in 0..(n as usize) {
+        let callback = callback.clone(&mut cx);
+        let queue = queue.clone();
+
+        std::thread::spawn(move || queue.send(move |mut cx| {
+            let callback = callback.deref(&mut cx);
+            let this = cx.undefined();
+            let args = vec![cx.number(i as f64)];
+    
+            callback.call(&mut cx, this, args)
+        }));
+    }
+
+    callback.drop(&mut cx);
+
+    Ok(cx.undefined())
 }
