@@ -12,7 +12,7 @@ use neon_runtime;
 use neon_runtime::raw;
 
 /// A Rust task that can be executed in a background thread.
-pub trait Task: Send + Sized + 'static {
+pub trait Task: Sized + 'static {
     /// The task's result type, which is sent back to the main thread to communicate a successful result back to JavaScript.
     type Output: Send + 'static;
 
